@@ -1,0 +1,12 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/.idea/*
+
+
+/hub-fCYf.iml
+/modules.xml
+/inspectionProfiles/profiles_settings.xml
+/vcs.xml
