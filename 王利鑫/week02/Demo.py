@@ -60,8 +60,8 @@ def cross_entropy(y_p, y):
 class DemoModule(nn.Module):
     def __init__(self):
         super().__init__()
-        self.hide_linear1 = nn.Linear(16, 16)
-        #self.hide_linear2 = nn.Linear(32, 16)
+        self.hide_linear1 = nn.Linear(16, 32)
+        self.hide_linear2 = nn.Linear(32, 16)
         # 一层隐藏层
         self.out_linear = nn.Linear(16, 7)
         # softmax 作为最外层激活函数，dim = 1 代表按照行的维度计算概率值
