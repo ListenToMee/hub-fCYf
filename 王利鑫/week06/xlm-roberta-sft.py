@@ -266,6 +266,13 @@ def train_one_epoch(model, loader, loss_fn, optimizer, scheduler, fgm, device,
 
         logits = model(input_ids, attention_mask)
         loss = loss_fn(logits, labels)
+
+        # 防止 NaN/Inf 污染整个模型权重（一旦污染，argmax 会退化成全部预测同一类）
+        if not torch.isfinite(loss):
+            print(f"\n[警告] epoch {epoch} 出现 loss=NaN/Inf，已跳过该 batch 的更新")
+            optimizer.zero_grad()
+            continue
+
         loss.backward()
 
         if fgm is not None:
@@ -275,6 +282,7 @@ def train_one_epoch(model, loader, loss_fn, optimizer, scheduler, fgm, device,
             loss_adv.backward()
             fgm.restore()                             # 恢复原词嵌入
 
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)   # 梯度裁剪，防止爆炸
         optimizer.step()
         scheduler.step()
         optimizer.zero_grad()
